@@ -56,10 +56,11 @@ router.get('/registrations', auth.connect(basic), (req, res) => {
         .catch(() => { res.send('Sorry! Something went wrong.'); });
 });
 
-router.delete('/delete', auth.connect(basic), (req, res) => {
-    registration.findByIdAndRemove(req.params.id, function (err) {
+router.get('/:id/delete', (req, res) => {
+    console.log(req.body);
+    Registration.findByIdAndDelete(req.params.id, function (err) {
         if (err) return next(err);
-        res.send('Deleted successfully!');
+        res.render('delete');
     });
 });
 
