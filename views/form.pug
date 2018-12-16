@@ -27,6 +27,24 @@ block content
       value=data.email
     )
 
+    label(for="password") Password:
+    input(
+      type="password"
+      id="password"
+      name="password"
+      class="form-control"
+      value=data.password
+    )
+
+    label(for="password confirm") Password Confirm:
+    input(
+      type="password"
+      id="passwordConf"
+      name="passwordConf"
+      class="form-control"
+      value=data.passwordConf
+    )
+
     input(
       type="submit"
       value="Submit"
