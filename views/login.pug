@@ -8,7 +8,7 @@ block content
       for error in errors
         li= error.msg
 
-  form(action="." method="POST" class="form-registration")
+  form(action="/Welcome" method="POST" class="form-registration")
     label(for="name") Name:
     input(
       type="text"
@@ -51,30 +51,40 @@ block content
       class="btn btn-lg btn-primary btn-block"
     )
 
-    -data = data || {}
+
+
+
+
+
+
+
+
+
+    
+  -data = data || {}
 
   if errors
     ul.my-errors
       for error in errors
         li= error.msg
         
-  form(action="." method="POST" class="form-login")
-    label(for="nameLogin") Name:
+  form(action="/Welcome" method="POST" class="form-login")
+    label(for="name") Name:
     input(
       type="text"
       id="name"
-      name="nameLogin"
+      name="name"
       class="form-control"
-      value=data.nameLogin
+      value=data.name
     )
 
-    label(for="passwordLogin") Password:
+    label(for="password") Password:
     input(
       type="password"
       id="password"
-      name="passwordLogin"
+      name="password"
       class="form-control"
-      value=data.passwordLogin
+      value=data.password
     )
 
     input(

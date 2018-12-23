@@ -12,12 +12,34 @@ const basic = auth.basic({
     file: path.join(__dirname, '../users.htpasswd')
 });
 
+router.get('/Login', (req, res) => {
+    res.render('login', { title: 'Login form', pageHeader: 'Login Page' });
 
-router.get('/', (req, res) => {
-    res.render('form', { title: 'Registration form' });
 });
 
+
+router.get('/', (req, res) => {
+    console.log("hello");
+    res.render('form', { title: 'Registration form', pageHeader: 'Registration Page' });
+});
+
+
+
 router.post('/',
+
+   
+
+    [
+        body('nameLogin')
+            .isLength({ min: 1 })
+            .withMessage('Please enter a name'),
+        body('passwordLogin')
+            .isLength({ min: 1 })
+            .withMessage('Please enter an password')
+    ],
+
+
+
     [
         body('name')
             .isLength({ min: 1 })
@@ -31,7 +53,10 @@ router.post('/',
     ],
     
     (req, res) => {
-        
+        console.log(req.body);
+        if (req.body.nameLogin) {
+            console.log("yep it worked");
+        }
         // Create a password salt
         var salt = bcrypt.genSaltSync(10);
 
@@ -60,6 +85,8 @@ router.post('/',
     }
 
 );
+
+
 
 router.get('/registrations', auth.connect(basic), (req, res) => {
     Registration.find()

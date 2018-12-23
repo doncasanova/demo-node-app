@@ -20,7 +20,7 @@ body {
     flex-wrap: wrap;
 }
 
-    .form-registration input {
+    .form-registration  input {
         width: 100%;
         margin: 0px 0 10px;
     }
@@ -28,6 +28,28 @@ body {
     .form-registration .btn {
         flex: 1 0 100%;
     }
+
+/* css for login form */
+.form-login {
+    max-width: 330px;
+    padding: 15px;
+    margin: 0 auto;
+}
+
+.form-login {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+    .form-login input {
+        width: 100%;
+        margin: 0px 0 10px;
+    }
+
+     .form-login .btn {
+        flex: 1 0 100%;
+    }
+
 
 .my-errors {
     margin: 0 auto;
@@ -68,3 +90,13 @@ body {
         .listing-table th:first-child {
             border-right: 1px solid #666;
         }
+.welcome {
+    text-align: center;
+    margin: 0 0 2rem;
+}
+
+.name {
+    text-align: center;
+    text-decoration-style:wavy;
+
+}
