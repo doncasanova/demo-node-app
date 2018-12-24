@@ -50,3 +50,35 @@ block content
       value="Submit"
       class="btn btn-lg btn-primary btn-block"
     )
+
+    -data = data || {}
+
+  if errors
+    ul.my-errors
+      for error in errors
+        li= error.msg
+        
+  form(action="welcome" method="POST" class="form-login")
+    label(for="nameLogin") Name:
+    input(
+      type="text"
+      id="name"
+      name="nameLogin"
+      class="form-control"
+      value=data.nameLogin
+    )
+
+    label(for="passwordLogin") Password:
+    input(
+      type="password"
+      id="password"
+      name="passwordLogin"
+      class="form-control"
+      value=data.passwordLogin
+    )
+
+    input(
+      type="submit"
+      value="Submit"
+      class="btn btn-lg btn-primary btn-block"
+    )

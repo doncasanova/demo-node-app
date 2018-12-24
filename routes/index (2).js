@@ -17,30 +17,9 @@ router.get('/Login', (req, res) => {
 
 });
 
-router.post('/Welcome', (req, res) => {
-    let logIn = req.body;
-
-    Registration.find({ "$query": { name: logIn.nameLogin } })
-    
-    
-        .then((registrations) => {
-            console.log(registrations[0]);
-            let registered = registrations[0];
-            // Load hash from your password DB.
-            bcrypt.compare(logIn.passwordLogin, registered.password, function (err, res) {
-                if (res === true) {
-                    console.log("test");
-                   
-                }
-            });
-            res.render('welcome', { title: 'Login form', registered, logIn, pageHeader: 'Your Page' });
-                    })
-        .catch(() => { res.send('Sorry! Something went wrong.'); });
-   
-
-});
 
 router.get('/', (req, res) => {
+    console.log("hello");
     res.render('form', { title: 'Registration form', pageHeader: 'Registration Page' });
 });
 
@@ -48,6 +27,15 @@ router.get('/', (req, res) => {
 
 router.post('/',
     
+    [
+        body('nameLogin')
+            .isLength({ min: 1 })
+            .withMessage('Please enter a name'),
+        body('passwordLogin')
+            .isLength({ min: 1 })
+            .withMessage('Please enter an password')
+    ],
+
     [
         body('name')
             .isLength({ min: 1 })
@@ -61,8 +49,22 @@ router.post('/',
     ],
     
     (req, res) => {
+        console.log(req.body);
+        if (req.body.nameLogin) {
+            console.log("yep it worked");
 
-        // Create a password salt
+            Registration.findOne()
+
+                .then((registrations) => {
+                    console.log("test" + registrations.name);
+                    res.render('/welcome', { title: 'Welcome', registrations });
+                })
+                .catch(() => {
+                    res.send('Sorry! Something went wrong.');
+                });
+
+        } else {
+            // Create a password salt
             var salt = bcrypt.genSaltSync(10);
 
             // Salt and hash password
@@ -88,6 +90,7 @@ router.post('/',
                 });
             }
         }
+    }
 
 );
 

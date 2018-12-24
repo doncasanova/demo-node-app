@@ -1,66 +1,7 @@
 extends layout
 
 block content
-  -data = data || {}
-
-  if errors
-    ul.my-errors
-      for error in errors
-        li= error.msg
-
-  form(action="/Welcome" method="POST" class="form-registration")
-    label(for="name") Name:
-    input(
-      type="text"
-      id="name"
-      name="name"
-      class="form-control"
-      value=data.name
-    )
-
-    label(for="email") Email:
-    input(
-      type="email"
-      id="email"
-      name="email"
-      class="form-control"
-      value=data.email
-    )
-
-    label(for="password") Password:
-    input(
-      type="password"
-      id="password"
-      name="password"
-      class="form-control"
-      value=data.password
-    )
-
-    label(for="password confirm") Password Confirm:
-    input(
-      type="password"
-      id="passwordConf"
-      name="passwordConf"
-      class="form-control"
-      value=data.passwordConf
-    )
-
-    input(
-      type="submit"
-      value="Submit"
-      class="btn btn-lg btn-primary btn-block"
-    )
-
-
-
-
-
-
-
-
-
-
-    
+   
   -data = data || {}
 
   if errors
@@ -68,23 +9,23 @@ block content
       for error in errors
         li= error.msg
         
-  form(action="/Welcome" method="POST" class="form-login")
+  form(action="/welcome" method="POST" class="form-login")
     label(for="name") Name:
     input(
       type="text"
       id="name"
-      name="name"
+      name="nameLogin"
       class="form-control"
-      value=data.name
+      value=data.nameLogin
     )
 
     label(for="password") Password:
     input(
       type="password"
       id="password"
-      name="password"
+      name="passwordLogin"
       class="form-control"
-      value=data.password
+      value=data.passwordLogin
     )
 
     input(
