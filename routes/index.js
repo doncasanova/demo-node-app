@@ -41,13 +41,15 @@ router.post('/Welcome', (req, res) => {
 });
 
 router.get('/', (req, res) => {
-    res.render('form', { title: 'Registration form', pageHeader: 'Registration Page' });
+    res.render('layout', { title: 'Hello', pageHeader: 'Welcome to our site' });
 });
 
-
+router.get('/form', (req, res) => {
+    res.render('form', { title: 'registration', pageHeader: 'Registration' });
+});
 
 router.post('/',
-    
+
     [
         body('name')
             .isLength({ min: 1 })
@@ -57,7 +59,10 @@ router.post('/',
             .withMessage('Please enter an email'),
         body('password')
             .isLength({ min: 1 })
-            .withMessage('Please enter an password')
+            .withMessage('Please enter an password'),
+        body('passwordConf')
+            .isLength({ min: 1 })
+            .withMessage('Please enter an passwordConf')
     ],
     
     (req, res) => {

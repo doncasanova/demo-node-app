@@ -7,6 +7,6 @@
     "\\routes",
     "\\views"
   ],
-  "SelectedNode": "\\views\\layout.pug",
+  "SelectedNode": "\\routes\\index.js",
   "PreviewInSolutionExplorer": false
 }
