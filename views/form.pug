@@ -9,6 +9,7 @@ block content
         li= error.msg
 
   form(action="." method="POST" class="form-registration")
+    h3 #{alertUserNameUsed}
     label(for="name") Name:
     input(
       type="text"
@@ -26,7 +27,7 @@ block content
       class="form-control"
       value=data.email
     )
-
+    h3 #{alertPasswordsDontMatch}
     label(for="password") Password:
     input(
       type="password"

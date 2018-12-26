@@ -17,6 +17,11 @@ router.get('/Login', (req, res) => {
 
 });
 
+router.get('/Logout', (req, res) => {
+    res.render('logout', { title: 'Logout form', pageHeader: 'Your logged out' });
+
+});
+
 router.post('/Welcome', (req, res) => {
     let logIn = req.body;
 
@@ -24,7 +29,7 @@ router.post('/Welcome', (req, res) => {
     
     
         .then((registrations) => {
-            console.log(registrations[0]);
+           
             let registered = registrations[0];
             // Load hash from your password DB.
             bcrypt.compare(logIn.passwordLogin, registered.password, function (err, res) {
@@ -33,7 +38,7 @@ router.post('/Welcome', (req, res) => {
                    
                 }
             });
-            res.render('welcome', { title: 'Login form', registered, logIn, pageHeader: 'Your Page' });
+            res.render('welcome', { title: 'Login form', registered});
                     })
         .catch(() => { res.send('Sorry! Something went wrong.'); });
    
@@ -50,6 +55,7 @@ router.get('/form', (req, res) => {
 
 router.post('/',
 
+
     [
         body('name')
             .isLength({ min: 1 })
@@ -64,35 +70,78 @@ router.post('/',
             .isLength({ min: 1 })
             .withMessage('Please enter an passwordConf')
     ],
-    
+
     (req, res) => {
+        let signUp = req.body;
 
-        // Create a password salt
-            var salt = bcrypt.genSaltSync(10);
+        Registration.find({ "$query": { name: signUp.name } })
+            .then((registrations) => {
+                let test = registrations[0].name;
+                console.log(test);
+                if (test === signUp.name) {
 
-            // Salt and hash password
-            var newPassword = bcrypt.hashSync(req.body.password, salt);
+                    console.log("name already used");
+                    res.render('form', {
+                        title: 'registration',
+                        pageHeader: 'Registration',
+                        alertUserNameUsed: 'User Name already used',
 
-            const errors = validationResult(req);
+                        data: req.body
+                    });
 
-            req.body.password = newPassword;
+                } else {
 
-            if (errors.isEmpty()) {
 
-                let registration = new Registration(req.body);
+                    if (req.body.password === req.body.passwordConf) {
+                        console.log('good to go');
 
-                registration.save()
-                    .then(() => { res.send('Thank you for your registration!'); })
-                    .catch(() => { res.send('Sorry! Something went wrong.'); });
-            }
-            else {
-                res.render('form', {
-                    title: 'Registration form',
-                    errors: errors.array(),
-                    data: req.body
-                });
-            }
+                        // Create a password salt
+                        var salt = bcrypt.genSaltSync(10);
+
+                        // Salt and hash password
+                        var newPassword = bcrypt.hashSync(req.body.password, salt);
+
+                        const errors = validationResult(req);
+
+                        req.body.password = newPassword;
+
+                        if (errors.isEmpty()) {
+
+                            let registration = new Registration(req.body);
+
+                            registration.save()
+                                .then(() => {
+                                    res.render('login', { title: 'Login form', pageHeader: 'Login Page', thankYou: 'Thank you for your registration!' });
+
+                                })
+                                .catch(() => { res.send('Sorry! Something went wrong.'); });
+                        }
+                        else {
+                            res.render('form', {
+                                title: 'Registration form',
+                                errors: errors.array(),
+                                data: req.body
+                            });
+                        }
+                    } else {
+
+                        res.render('form', {
+                            title: 'registration',
+                            pageHeader: 'Registration',
+                            alertPasswordsDontMatch: 'Password missmatch please re-enter',
+
+                            data: req.body
+                        });
+
+                   
+                    }
+
         }
+            })
+            .catch(() => { res.send('Sorry! Something went wrong.'); });
+        }
+
+    
 
 );
 
