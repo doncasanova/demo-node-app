@@ -17,31 +17,50 @@ router.get('/Login', (req, res) => {
 
 });
 
+
 router.get('/Logout', (req, res) => {
     res.render('logout', { title: 'Logout form', pageHeader: 'Your logged out' });
 
 });
 
+
 router.post('/Welcome', (req, res) => {
     let logIn = req.body;
 
     Registration.find({ "$query": { name: logIn.nameLogin } })
-    
-    
+
+
         .then((registrations) => {
-           
+
             let registered = registrations[0];
-            // Load hash from your password DB.
-            bcrypt.compare(logIn.passwordLogin, registered.password, function (err, res) {
-                if (res === true) {
-                    console.log("test");
+            console.log(registered.name);
+            if (registered === undefined) {
+                res.render('login', { title: 'Login form', pageHeader: 'Login Page', thankYou: 'Please check login' });
+            }
+            if (registered.name === logIn.nameLogin) {
+              
+
+                // Load hash from your password DB.
+                bcrypt.compare(logIn.passwordLogin, registered.password, function (err , response) {
                    
-                }
-            });
-            res.render('welcome', { title: 'Login form', registered});
-                    })
+                    if (response === true) {
+
+                        res.render('welcome', { title: 'Login form', registered });
+
+                    } else {
+
+                        res.render('login', { title: 'Login form', pageHeader: 'Login Page', thankYou: 'Please check login' });
+
+
+                    }
+                });
+                
+               
+            }
+        
+        })
         .catch(() => { res.send('Sorry! Something went wrong.'); });
-   
+
 
 });
 
@@ -73,11 +92,12 @@ router.post('/',
 
     (req, res) => {
         let signUp = req.body;
-
+        
         Registration.find({ "$query": { name: signUp.name } })
             .then((registrations) => {
                 let test = registrations[0].name;
                 console.log(test);
+
                 if (test === signUp.name) {
 
                     console.log("name already used");
@@ -88,60 +108,57 @@ router.post('/',
 
                         data: req.body
                     });
+                }
+            })
+            .catch(() => {
+                
+                console.log("in the else statemant");
+                if (req.body.password === req.body.passwordConf) {
+                    console.log('good to go');
 
-                } else {
+                    // Create a password salt
+                    var salt = bcrypt.genSaltSync(10);
 
+                    // Salt and hash password
+                    var newPassword = bcrypt.hashSync(req.body.password, salt);
 
-                    if (req.body.password === req.body.passwordConf) {
-                        console.log('good to go');
+                    const errors = validationResult(req);
 
-                        // Create a password salt
-                        var salt = bcrypt.genSaltSync(10);
+                    req.body.password = newPassword;
 
-                        // Salt and hash password
-                        var newPassword = bcrypt.hashSync(req.body.password, salt);
+                    if (errors.isEmpty()) {
 
-                        const errors = validationResult(req);
+                        let registration = new Registration(req.body);
 
-                        req.body.password = newPassword;
+                        registration.save()
+                            .then(() => {
+                                res.render('login', { title: 'Login form', pageHeader: 'Login Page', thankYou: 'Thank you for your registration!' });
 
-                        if (errors.isEmpty()) {
-
-                            let registration = new Registration(req.body);
-
-                            registration.save()
-                                .then(() => {
-                                    res.render('login', { title: 'Login form', pageHeader: 'Login Page', thankYou: 'Thank you for your registration!' });
-
-                                })
-                                .catch(() => { res.send('Sorry! Something went wrong.'); });
-                        }
-                        else {
-                            res.render('form', {
-                                title: 'Registration form',
-                                errors: errors.array(),
-                                data: req.body
-                            });
-                        }
-                    } else {
-
+                            })
+                            .catch(() => { res.send('Sorry! Something went wrong.'); });
+                    }
+                    else {
                         res.render('form', {
-                            title: 'registration',
-                            pageHeader: 'Registration',
-                            alertPasswordsDontMatch: 'Password missmatch please re-enter',
-
+                            title: 'Registration form',
+                            errors: errors.array(),
                             data: req.body
                         });
-
-                   
                     }
+                } else {
 
-        }
-            })
-            .catch(() => { res.send('Sorry! Something went wrong.'); });
-        }
+                    res.render('form', {
+                        title: 'registration',
+                        pageHeader: 'Registration',
+                        alertPasswordsDontMatch: 'Password missmatch please re-enter',
 
-    
+                        data: req.body
+                    });
+
+
+                }
+            });
+
+            }
 
 );
 
@@ -166,5 +183,7 @@ router.get('/:id/delete', (req, res) => {
 
 
 module.exports = router;
+
+
 
 
