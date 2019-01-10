@@ -114,6 +114,10 @@ router.get('/:id/delete', (req, res) => {
     });
 });
 
+router.get('/test', (req, res) => {
+    res.render('test', { title: 'Test', pageHeader: 'Welcome to our site' });
+});
+
 
 
 module.exports = router;
