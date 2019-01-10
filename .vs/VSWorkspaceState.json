@@ -7,6 +7,10 @@
     "\\routes",
     "\\views"
   ],
+<<<<<<< HEAD
   "SelectedNode": "\\views\\test.pug",
+=======
+  "SelectedNode": "\\views\\loggedIn.pug",
+>>>>>>> cca3f187a61e70379a8c0641687b0308200f2b3e
   "PreviewInSolutionExplorer": false
 }
